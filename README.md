@@ -60,7 +60,6 @@ git clone <your-git-origin> .
    | `PICUI_TOKEN` | 图床 token                              |
    | `USER_DATA_DIR`, `HEADLESS`, `DEBUG_SHOTS` 等 | 登录脚本运行参数，如需可见浏览器可设 `HEADLESS=false`   |
    | `TARGET_URLS`/`TARGET_URL` | 钉钉知识库根目录 URL（多个用逗号、分号或换行分隔）           |
-   | `KONGMING_BASE` | 孔明 API 基地址（默认指向测试环境，若要正式环境请替换）        |
    | `RAGFLOW_BASE/RAGFLOW_TOKEN/RAGFLOW_DATASET_ID` | RagFlow 接口地址及凭证（必填）                   |
    | `TRIGGER_BASE_URL` | 登录通知中的扫码链接，默认 `http://localhost:8999` |
    | `MIN_TS` | 文档过滤的最小更新时间（秒，Unix 时间戳），留空则不过滤        |
