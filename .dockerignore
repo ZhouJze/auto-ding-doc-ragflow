@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Persistent context (由卷挂载提供)
+persistent_context/
+
+# Test screenshots
+PRC/test/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.yml
+README.md
+.gitignore
+.dockerignore
+
+# Git
+.git/
+
+# Logs
+*.log
+

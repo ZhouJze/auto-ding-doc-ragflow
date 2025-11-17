@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  ding-docker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ding-docker
+    ports:
+      - "8999:8999"
+    volumes:
+      # 持久化登录态（与 login_only.py 共享）
+      - ./persistent_context:/app/persistent_context
+      # 数据目录（下载、截图、JSON）
+      - ./data:/data
+      # 开发期源码热更新（login_only.py 与 PRC/）
+      - ./login_only.py:/app/login_only.py
+      - ./PRC:/app/PRC
+    env_file:
+      # 从 .env 文件加载环境变量（如果不存在则使用默认值）
+      - .env
+    environment:
+      # 钉钉机器人配置（必填）
+      # 从 .env 文件读取，如果不存在则使用默认值
+      - DING_ROBOT_ACCESS_TOKEN=${DING_ROBOT_ACCESS_TOKEN:-c47714769baf275fa072ad78169f0c9bfc96612e74ec08eee0b111f1804eea76}
+      - DING_ROBOT_SECRET=${DING_ROBOT_SECRET:-SEC7e1604e3cf35b1a4543f8acf1750dae2946e3ee48f601d7672489734be0c7e98}
+      - AT_MOBILES=${AT_MOBILES:-13505669690}
+      
+      # 图床配置（可选）
+      - PICUI_TOKEN=${PICUI_TOKEN:-1795|GdzkBaU9wreWyuhYls9Y06WUQZ3mGB7b1aQrDp7e}
+      - PICUI_API=${PICUI_API:-https://picui.cn/api/v1}
+      - SMMS_TOKEN=${SMMS_TOKEN:-}
+      
+      # Playwright 配置
+      - USER_DATA_DIR=${USER_DATA_DIR:-/app/persistent_context/Default}
+      - HEADLESS=${HEADLESS:-true}
+      - DEBUG_SHOTS=${DEBUG_SHOTS:-false}
+      - CLEAR_USER_DATA=${CLEAR_USER_DATA:-false}
+      - TRY_DESKTOP_TIMEOUT_S=${TRY_DESKTOP_TIMEOUT_S:-90}
+      
+      # 登录页配置
+      - DING_LOGIN_URL=${DING_LOGIN_URL:-https://login.dingtalk.com/oauth2/challenge.htm?redirect_uri=https%3A%2F%2Falidocs.dingtalk.com%2Fi%2F%3Fspm%3Da2q1e.24441682.0.0.2c8b252137UE4J&response_type=none&client_id=dingoaxhhpeq7is6j1sapz&scope=openid}
+      
+      # Ragflow 配置（run_update 功能必需）
+      - RAGFLOW_BASE=${RAGFLOW_BASE:-}
+      - RAGFLOW_TOKEN=${RAGFLOW_TOKEN:-}
+      - RAGFLOW_DATASET_ID=${RAGFLOW_DATASET_ID:-}
+      
+      # 下载目标配置（可选）
+      - TARGET_URLS=${TARGET_URLS:-}
+      - TARGET_URL=${TARGET_URL:-}
+      - MIN_TS=${MIN_TS:-0}
+      - TRIGGER_BASE_URL=${TRIGGER_BASE_URL:-http://localhost:8999}
+      
+      # Python 配置
+      - PYTHONUNBUFFERED=${PYTHONUNBUFFERED:-1}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8999/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
